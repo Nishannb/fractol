@@ -6,12 +6,12 @@ static void malloc_error(void)
     perror("Problems with malloc");
     exit(EXIT_FAILURE);
 }
-void data_init(t_fractol *fractol)
+static void data_init(t_fractol *fractol)
 {
     fractol->escape_value = 4;
-    fractol->interation_defintion = 242;
-    fractol->shift_x = 0;
-    fractol->shift_y = 0;
+    fractol->interation_defintion = 42;
+    fractol->shift_x = 0.0;
+    fractol->shift_y = 0.0;
     fractol->zoom = 1.0;
 }
 
@@ -28,6 +28,7 @@ static void events_init(t_fractol *fractol)
 
 void fractol_init(t_fractol *fractol)
 {
+    write(1, "fractol\n", sizeof("fractol"));
     fractol->mlx_connection = mlx_init();
     if(fractol->mlx_connection == NULL)
     {

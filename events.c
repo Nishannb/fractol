@@ -1,4 +1,5 @@
 #include "fractol.h"
+# include "minilibx_macos/mlx.h"
 
 int close_handler(t_fractol *fractol)
 {
@@ -10,23 +11,44 @@ int close_handler(t_fractol *fractol)
 }
 
 
-int key_handler(int keysym, t_fractol *fractol)
-{
+// int key_handler(int keysym, t_fractol *fractol)
+// {
 
-    if(keysym == XK_Escape)
+//     if(keysym == XK_Escape)
+//         close_handler(fractol);
+//     else if (keysym == XK_Left)
+//         fractol->shift_x += (0.5 * fractol->zoom);
+//     else if (keysym == XK_Right)
+//         fractol->shift_x -= (0.5 * fractol->zoom);
+//     else if (keysym == XK_Up)
+//         fractol->shift_y -= (0.5 * fractol->zoom);
+//     else if (keysym == XK_Down)
+//         fractol->shift_y += (0.5 * fractol->zoom);
+//     else if (keysym == XK_plus)
+//         fractol->interation_defintion +=10;
+//     else if (keysym == XK_minus)
+//         fractol->interation_defintion -=10;
+//     fractol_render(fractol);
+//     return (0);
+// }
+
+int key_handler(int keycode, t_fractol *fractol)
+{
+    if (keycode == 53) 
         close_handler(fractol);
-    else if (keysym == XK_Left)
+    else if (keycode == 123) 
         fractol->shift_x += (0.5 * fractol->zoom);
-    else if (keysym == XK_Right)
+    else if (keycode == 124) 
         fractol->shift_x -= (0.5 * fractol->zoom);
-    else if (keysym == XK_Up)
+    else if (keycode == 126) 
         fractol->shift_y -= (0.5 * fractol->zoom);
-    else if (keysym == XK_Down)
+    else if (keycode == 125) 
         fractol->shift_y += (0.5 * fractol->zoom);
-    else if (keysym == XK_plus)
-        fractol->interation_defintion +=10;
-    else if (keysym == XK_minus)
-        fractol->interation_defintion -=10;
+    else if (keycode == 24) 
+        fractol->interation_defintion += 10;
+    else if (keycode == 27) 
+        fractol->interation_defintion -= 10;
+
     fractol_render(fractol);
     return (0);
 }

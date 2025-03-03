@@ -7,7 +7,12 @@
 #include <stdlib.h>
 # include <X11/X.h>
 # include <X11/keysym.h>
-#include "../minilibx-mac-osx/mlx.h"
+#include "minilibx_macos/mlx.h"
+#include <pthread.h>
+#include <time.h>
+
+
+#define THREADS 8 
 
 
 #define WIDTH  800
@@ -57,7 +62,14 @@ typedef struct s_fractol
     double julia_x;
     double julia_y;
 } t_fractol;
+// Structure to pass data to the thread
+typedef struct s_thread_data {
+    int start_y;  // Start Y coordinate for this thread
+    int end_y;    // End Y coordinate for this thread
+    t_fractol *fractol;
+} t_thread_data;
 
+void fractol_render_seq(t_fractol *fractol);
 int ft_strncmp(char *s1, char *s2, int n);
 void ft_putstr(char *s, int fd);
 void fractol_init(t_fractol *fractol);
