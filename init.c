@@ -21,14 +21,12 @@ static void events_init(t_fractol *fractol)
     mlx_hook(fractol->mlx_window, ButtonPress, ButtonPressMask, mouse_handler, fractol);
     mlx_hook(fractol->mlx_window, DestroyNotify, StructureNotifyMask, close_handler, fractol);
     mlx_hook(fractol->mlx_window, MotionNotify, PointerMotionMask, julia_track, fractol);
-
 }
 
 
 
 void fractol_init(t_fractol *fractol)
 {
-    write(1, "fractol\n", sizeof("fractol"));
     fractol->mlx_connection = mlx_init();
     if(fractol->mlx_connection == NULL)
     {
@@ -37,15 +35,15 @@ void fractol_init(t_fractol *fractol)
     fractol->mlx_window = mlx_new_window(fractol->mlx_connection, WIDTH, HEIGHT, fractol->name);
     if(fractol->mlx_window == NULL)
     {
-        // mlx_destroy_display(fractol->mlx_connection);
+        mlx_destroy_display(fractol->mlx_connection);
         free(fractol->mlx_connection);
         malloc_error();
     }
     fractol->img.img_ptr = mlx_new_image(fractol->mlx_connection, WIDTH, HEIGHT);
     if(fractol->img.img_ptr == NULL)
     {
-        // mlx_destroy_window(fractol->mlx_connection, fractol->mlx_window);
-        // mlx_destroy_display(fractol->mlx_connection);
+        mlx_destroy_window(fractol->mlx_connection, fractol->mlx_window);
+        mlx_destroy_display(fractol->mlx_connection);
         free(fractol->mlx_connection);
         malloc_error();
     }

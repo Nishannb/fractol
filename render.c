@@ -35,6 +35,7 @@ static void handle_pixel(int x, int y, t_fractol *fractol)
     mandel_vs_julia(&z, &c, fractol);
     while (i < fractol->interation_defintion)
     {
+        // printf("%d\n", i);
         z = sum_complex(square_complex(z), c);
         if(pythagoras(z) > fractol->escape_value)
         {
@@ -57,7 +58,7 @@ static void handle_pixel(int x, int y, t_fractol *fractol)
 //     while (++y <HEIGHT)
 //     {
 //         x = -1;
-//         while (++x <WIDTH)
+//         while (++x < WIDTH)
 //         {
 //             handle_pixel(x, y, fractol);
 //         }
@@ -73,49 +74,39 @@ void *render_pixels(void *arg)
 {
     t_thread_data *data = (t_thread_data *)arg;
     int x, y;
-    for (y = data->start_y; y < data->end_y; ++y) {
-        for (x = 0; x < WIDTH; ++x) {
-            handle_pixel(x, y, data->fractol);  // Render the pixel
+   y = data->start_y;
+    while (y < data->end_y) {
+        x = 0;  
+        while (x < WIDTH) {
+            handle_pixel(x, y, data->fractol);  
+            ++x;
         }
+        ++y;
     }
     return NULL;
-}
-
-void fractol_render_seq(t_fractol *fractol)
-{
-    int x, y;
-    y = -1;
-    while (++y < HEIGHT)
-    {
-        x = -1;
-        while (++x < WIDTH)
-        {
-            handle_pixel(x, y, fractol); // Original code
-        }
-    }
 }
 
 void fractol_render(t_fractol *fractol)
 {
     int i;
-    pthread_t threads[THREADS];  // Array of threads
-    t_thread_data thread_data[THREADS];  // Array of data for each thread
+    pthread_t threads[THREADS];  
+    t_thread_data thread_data[THREADS];  
     int rows_per_thread = HEIGHT / THREADS;
 
-    // Create threads
-    for (i = 0; i < THREADS; ++i) {
-        thread_data[i].start_y = i * rows_per_thread;  // Calculate the start Y for this thread
-        thread_data[i].end_y = (i == THREADS - 1) ? HEIGHT : (i + 1) * rows_per_thread;  // End Y for the last thread might be different
+    i = 0;
+    while(i < THREADS) {
+        thread_data[i].start_y = i * rows_per_thread;  
+        thread_data[i].end_y = (i == THREADS - 1) ? HEIGHT : (i + 1) * rows_per_thread;  
         thread_data[i].fractol = fractol;
         
-        pthread_create(&threads[i], NULL, render_pixels, &thread_data[i]);  // Create the thread
+        pthread_create(&threads[i], NULL, render_pixels, &thread_data[i]);  
+        i++;
     }
 
-    // Wait for all threads to finish
-    for (i = 0; i < THREADS; ++i) {
-        pthread_join(threads[i], NULL);  // Join the thread (wait for it to finish)
+    i = 0;
+    while(i < THREADS) {
+        pthread_join(threads[i], NULL);  
+        i++;
     }
-
-    // After all threads finish, update the window with the image
     mlx_put_image_to_window(fractol->mlx_connection, fractol->mlx_window, fractol->img.img_ptr, 0, 0);
 }

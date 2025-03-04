@@ -1,32 +1,32 @@
 #include "fractol.h"
-# include "minilibx_macos/mlx.h"
+# include "minilibx-linux/mlx.h"
 
-void measure_sequential(t_fractol *fractol)
-{
-    clock_t start, end;
-    double cpu_time_used;
+// void measure_sequential(t_fractol *fractol)
+// {
+//     clock_t start, end;
+//     double cpu_time_used;
 
-    start = clock();
-    fractol_render_seq(fractol);  // Render using the original code
-    end = clock();
+//     start = clock();
+//     fractol_render_seq(fractol);  // Render using the original code
+//     end = clock();
 
-    cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Sequential render took %f seconds\n", cpu_time_used);
-}
+//     cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+//     printf("Sequential render took %f seconds\n", cpu_time_used);
+// }
 
-// Measure the time for parallel render
-void measure_parallel(t_fractol *fractol)
-{
-    clock_t start, end;
-    double cpu_time_used;
+// // Measure the time for parallel render
+// void measure_parallel(t_fractol *fractol)
+// {
+//     clock_t start, end;
+//     double cpu_time_used;
 
-    start = clock();
-    fractol_render(fractol);  // Render using the parallel code
-    end = clock();
+//     start = clock();
+//     fractol_render(fractol);  // Render using the parallel code
+//     end = clock();
 
-    cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Parallel render took %f seconds\n", cpu_time_used);
-}
+//     cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+//     printf("Parallel render took %f seconds\n", cpu_time_used);
+// }
 
 
 int main (int ac, char **av) {   
@@ -43,11 +43,11 @@ int main (int ac, char **av) {
                 fractol.julia_y = atodbl(av[3], 1);
             }
             fractol_init(&fractol);
-            // fractol_render(&fractol);
-            measure_sequential(&fractol);
+            fractol_render(&fractol);
+            // measure_sequential(&fractol);
 
             // Measure parallel render time
-            measure_parallel(&fractol);
+            // measure_parallel(&fractol);
 
             mlx_loop(fractol.mlx_connection);
     } else {
